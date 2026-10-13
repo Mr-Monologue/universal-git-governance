@@ -1,0 +1,13 @@
+# Source archives and release artifacts
+*.zip
+/Universal_Git_Governance_v3/
+/dist/
+# Local caches and temporary files
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

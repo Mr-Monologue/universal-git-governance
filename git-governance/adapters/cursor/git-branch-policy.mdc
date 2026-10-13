@@ -1,0 +1,15 @@
+---
+description: 通用 Git 分支、中文提交、候选发布与 Agent 授权规则。处理 Git 操作和发布任务时读取完整 Skill。
+alwaysApply: true
+---
+
+# Git Governance Entry — Cursor
+
+在创建分支、暂存、提交、推送、创建 PR、合并、打 Tag 或发布之前，先阅读本仓库安装的完整 Skill：
+
+@.agents/skills/git-governance/SKILL.md
+@.agents/skills/git-governance/references/GIT_GOVERNANCE.md
+
+以上路径相对于目标项目根目录；必须按 README 同时安装整个 Skill 目录和本适配文件。
+若采用其他安装位置，同步修改这两个引用。完整规则以 Skill 的引用文档为准。
+遵循既有仓库政策及当次授权；任务完成后停止，不自动继续未经授权的新任务。
