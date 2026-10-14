@@ -32,6 +32,18 @@ jobs:
         run: python scripts/sync_embedded_c_skill.py --check
       - name: Validate Embedded C Skill
         run: python scripts/validate_embedded_c_skill.py
+      - name: Check Embedded Project Skill distribution copies
+        run: python scripts/sync_embedded_project_skill.py --check
+      - name: Validate Embedded Project Skill
+        run: python scripts/validate_embedded_project_skill.py
+      - name: Exercise standalone project Skill
+        run: |
+          cp -R skills/embedded-project-init "$RUNNER_TEMP/project skill"
+          for profile in firmware embedded-fullstack robotics; do
+            python -I "$RUNNER_TEMP/project skill/scripts/init_project.py" --target "$RUNNER_TEMP/project $profile" --name "Example Project" --profile "$profile" --dry-run
+            python -I "$RUNNER_TEMP/project skill/scripts/init_project.py" --target "$RUNNER_TEMP/project $profile" --name "Example Project" --profile "$profile"
+            python -I "$RUNNER_TEMP/project skill/scripts/validate_project.py" --target "$RUNNER_TEMP/project $profile" --profile "$profile"
+          done
       - name: Compile generated module
         run: |
           python skills/embedded-c-module/scripts/new_c_module.py --module sample_module --output "$RUNNER_TEMP/generated module"

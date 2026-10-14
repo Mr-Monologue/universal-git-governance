@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | [standards](standards/README.md) | Standard：长期有效的编码、测试和文档规范 | Embedded C Draft v0.1.0 |
 | [skills](skills/README.md) | Skill：可执行任务流程与技能索引 | Scaffold；已发布技能见下文 |
-| [templates](templates/README.md) | Template：项目及文件生成模板 | Scaffold |
+| [templates](templates/README.md) | Template：项目及文件生成模板 | Embedded Project Draft |
 | [tools](tools/README.md) | Tool：跨项目生成器、安装器和校验工具 | Scaffold |
 | [adapters](adapters/README.md) | 不同 Agent 的薄适配入口 | Scaffold |
 | [handbook](handbook/README.md) | 沉淀经验证的工程方法与实践 | Scaffold |
@@ -32,7 +32,10 @@
 该草案不代表 MISRA C 合规认证，不自动应用到其他项目。
 [embedded-c-module](skills/embedded-c-module/README.md) 为 **Draft / Preview 0.1.0**，
 提供独立分发的模块开发工作流与 C/H 骨架生成器；编码风格尚未冻结。
-embedded-project-init 仍为 **Planned / 未实现**。
+[embedded-project-init](skills/embedded-project-init/README.md) 为 **Draft / Preview 0.1.0**，
+提供 firmware、embedded-fullstack、robotics 三种工程目录骨架，支持 Dry Run、冲突保护、幂等生成和只读验证。
+完整复制 Skill 后可在仓库外使用 Python 3.11+ 标准库运行；不自动执行 Git 或安装到其他工程。
+模板及 Profile 的唯一人工维护源为 [embedded-project](templates/embedded-project/README.md)，分发副本通过同步检查保持一致。
 本仓库不收纳其他项目完整源码、公司保密资料、访问密钥或个人敏感资料。
 
 ## 安装 Skill
@@ -130,11 +133,13 @@ python scripts/validate_repository.py
 python scripts/validate_embedded_c.py
 python scripts/sync_embedded_c_skill.py --check
 python scripts/validate_embedded_c_skill.py
+python scripts/sync_embedded_project_skill.py --check
+python scripts/validate_embedded_project_skill.py
 python -m unittest discover -s tests -v
 git diff --check
 ```
 
-CI 保留 PR、main/develop/release 和版本 Tag 的触发及旧验证，追加结构、Embedded C 验证与测试。
+CI 保留 PR、main/develop/release 和版本 Tag 的触发及旧验证，追加结构、Embedded C 和项目初始化验证与测试。
 Embedded C 示例在 CI 用 GCC 的 C11 严格告警编译并运行边界测试，构建输出位于临时目录。
 存在 CI 不代表已启用分支保护；验证不替代人工规则审查或 Agent 行为验收。
 Git Governance 目录、内容、许可证、v3.0.0 校验和安装入口保持兼容。
