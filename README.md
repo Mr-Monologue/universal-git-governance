@@ -1,34 +1,35 @@
-# Universal Git Governance
+# Engineering System
 
-面向开发者及 AI Coding Agents 的通用 Git 分支、提交、协作、验证和发布治理规范。
-以可复用的 **Agent Skill** 为核心交付形式，提供 Cursor 适配入口；主要文档使用简体中文，
-不依赖具体业务项目、工作区名称或开发语言。
+跨项目、跨 Agent 的工程规范、可执行工作流、模板及工具库。
+当前是基础骨架（Scaffold），工作名称不改变远端仓库名称。
+目标：规范可复用、任务可执行、产物可验证、版本可追溯。
 
-## 适用范围
+## 目录导航与资产职责
 
-- 个人、开源、团队和企业软件项目，以及支持 Agent Skills 的开发工具。
-- 新项目经明确批准后可采用默认分支模型；既有仓库政策优先，不自动迁移工作流。
-- 组织强制安全、审批和身份要求优先。本规范不替代项目测试策略，也不自动授予 Git 操作权限。
+| 目录 | 职责 | 状态 |
+| --- | --- | --- |
+| [standards](standards/README.md) | Standard：长期有效的编码、测试和文档规范 | Scaffold |
+| [skills](skills/README.md) | Skill：可执行任务流程与技能索引 | Scaffold；已发布技能见下文 |
+| [templates](templates/README.md) | Template：项目及文件生成模板 | Scaffold |
+| [tools](tools/README.md) | Tool：跨项目生成器、安装器和校验工具 | Scaffold |
+| [adapters](adapters/README.md) | 不同 Agent 的薄适配入口 | Scaffold |
+| [handbook](handbook/README.md) | 沉淀经验证的工程方法与实践 | Scaffold |
+| [examples](examples/README.md) | 可复现的通用示例 | Scaffold |
+| [tests](tests/README.md) | 通用工具和结构测试 | 基础结构测试已实现 |
+| [scripts](scripts/validate_repository.py) | 仓库维护与验证脚本 | 基础验证已实现 |
 
-## 项目结构
+## 当前模块与版本边界
 
-```text
-universal-git-governance/
-├── README.md
-├── LICENSE
-├── .gitignore
-├── .gitattributes
-├── .github/workflows/validate.yml
-├── scripts/validate.py
-└── git-governance/
-    ├── SKILL.md
-    ├── references/GIT_GOVERNANCE.md
-    └── adapters/cursor/git-branch-policy.mdc
-```
+[git-governance](git-governance/SKILL.md) 是 Stable · 3.0.0 的已发布模块。
+[完整 Git 规范](git-governance/references/GIT_GOVERNANCE.md) 是其唯一规则源，
+[Cursor 适配](git-governance/adapters/cursor/git-branch-policy.mdc) 引导读取该规则。
+正式实现和安装路径保持不变；skills 仅提供索引，不复制或链接第二份实现。
+既有 v3.0.0 表示 Git Governance 模块版本，不是 Engineering System 的第三个大版本。
+未来聚合发布版本另行决策，各子模块独立记录版本。
 
-[SKILL.md](git-governance/SKILL.md) 是技能入口，
-[GIT_GOVERNANCE.md](git-governance/references/GIT_GOVERNANCE.md) 是唯一完整规则源，
-[Cursor 适配](git-governance/adapters/cursor/git-branch-policy.mdc) 只负责引导读取完整 Skill。
+拟开发模块：embedded-c-standard、embedded-c-module、embedded-project-init
+均为 **Planned / 未实现**，本次不提供 C 规范、项目模板或新 Skill。
+本仓库不收纳其他项目完整源码、公司保密资料、访问密钥或个人敏感资料。
 
 ## 安装 Skill
 
@@ -109,54 +110,28 @@ Copy-Item .agents/skills/git-governance/adapters/cursor/git-branch-policy.mdc .c
 
 不保证所有 Agent 自动读取规则；应通过一次只读检查验证其确实加载了完整规范。
 
-## 默认分支模型
+## 本地开发、验证与贡献
 
-```text
-feature/* → develop → release → main
-```
+先阅读 [AGENTS.md](AGENTS.md) 和既有 Git Governance 完整规范。
+默认流程为 feature/* → develop → 固定 release → main；独立任务从 develop 派生。
+修改、Commit、Push、PR、Merge、Tag、Release 分别核对授权。
+使用中文 Conventional Commit，显式暂存任务文件并审查暂存区；完成后停止。
 
-| 分支 | 职责 |
-| --- | --- |
-| `main` | 正式发布，默认分支 |
-| `develop` | 日常开发集成 |
-| 固定 `release` | 内部候选、回归与稳定化；公开仓库中仍对外可见 |
-| `feature/*` | 默认从 develop 派生的独立任务 |
-
-新仓库经授权后从同一个初始化提交建立三个长期分支；不创建 `release/v*` 版本分支。
-RC Tag 使用 `vX.Y.Z-rc.N`，正式 Annotated Tag 使用 `vX.Y.Z` 并指向 main 的正式提交。
-Commit 使用中文 Conventional Commit，保留真实贡献者身份。
-`git commit-tree` 仅作为逐次授权的受控例外，不能绕过必需的钩子或审查。
-Commit、Push、PR、Merge、Tag、Release 分别核对授权，任务完成后停止。
-
-本项目首次 Bootstrap 经明确授权，直接建立同源 main / develop / release 并发布 v3.0.0；
-不制造功能 PR、RC 或多余合并提交。后续独立开发任务按正式规范使用 feature/*。
-
-## 验证与贡献
-
-验证仅依赖 Python 3.11+ 和轻量 YAML 解析器：
+Python 3.11+；旧验证需要 PyYAML 6.0.3，新验证和单元测试只用标准库：
 
 ```bash
 python -m pip install PyYAML==6.0.3
 python scripts/validate.py
+python scripts/validate_repository.py
+python -m unittest discover -s tests -v
+git diff --check
 ```
 
-验证覆盖必需文件、Skill 与 Cursor YAML、必需字段、Markdown 围栏、相对文件引用、
-安装后的 Cursor 引用及意外的本机绝对路径。它不替代人工规则审查或 Agent 行为验收。
-GitHub Actions 对 PR、main / develop / release 更新及版本 Tag 运行同一验证。
-仓库分支保护需另行配置；存在 CI 不代表已经启用强制保护。
+CI 保留 PR、main/develop/release 和版本 Tag 的触发及旧验证，追加结构验证与测试。
+存在 CI 不代表已启用分支保护；验证不替代人工规则审查或 Agent 行为验收。
+Git Governance 目录、内容、许可证、v3.0.0 校验和安装入口保持兼容。
+问题反馈通过 [Issue](https://github.com/Mr-Monologue/universal-git-governance/issues)，避免私有资料。
 
-问题反馈请提交 [Issue](https://github.com/Mr-Monologue/universal-git-governance/issues)，
-说明场景、实际行为和期望结果，避免提交密钥或私有资料。
-改进前先沟通规则变化，按 feature → develop → release → main 流程提交 PR，
-附中文变更说明和验证结果。不要在适配文件中复制完整规范。
+## 许可证
 
-## 版本与许可证
-
-首个发布版本：**v3.0.0**。实际发布状态以 GitHub Release 和 CI 记录为准。
-项目采用 [MIT License](LICENSE)，版权持有人为仓库所有者 Mr-Monologue。
-发行包的 `git-governance/LICENSE` 是根许可证的副本，随技能复制保留。
-
-原始 v3 ZIP 是本次规则来源；工程化只完善安装说明、适配入口、验证和发行元数据。
-参考 [Agent Skills 规范](https://agentskills.io/specification)、
-[Git commit-tree](https://git-scm.com/docs/git-commit-tree) 和
-[Git Tags](https://git-scm.com/book/en/v2/Git-Basics-Tagging)。
+采用 [MIT License](LICENSE)。git-governance/LICENSE 保留为发行包许可证副本。
