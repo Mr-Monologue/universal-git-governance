@@ -8,7 +8,7 @@
 
 | 目录 | 职责 | 状态 |
 | --- | --- | --- |
-| [standards](standards/README.md) | Standard：长期有效的编码、测试和文档规范 | Scaffold |
+| [standards](standards/README.md) | Standard：长期有效的编码、测试和文档规范 | Embedded C Draft v0.1.0 |
 | [skills](skills/README.md) | Skill：可执行任务流程与技能索引 | Scaffold；已发布技能见下文 |
 | [templates](templates/README.md) | Template：项目及文件生成模板 | Scaffold |
 | [tools](tools/README.md) | Tool：跨项目生成器、安装器和校验工具 | Scaffold |
@@ -27,8 +27,10 @@
 既有 v3.0.0 表示 Git Governance 模块版本，不是 Engineering System 的第三个大版本。
 未来聚合发布版本另行决策，各子模块独立记录版本。
 
-拟开发模块：embedded-c-standard、embedded-c-module、embedded-project-init
-均为 **Planned / 未实现**，本次不提供 C 规范、项目模板或新 Skill。
+[Embedded C Coding Standard](standards/embedded-c/README.md) 已纳入 **Draft v0.1.0**
+规范基线、审查清单与验证示例；Doxygen 为强制要求，其余未冻结的风格保留为建议。
+该草案不代表 MISRA C 合规认证，不自动应用到其他项目。
+embedded-c-module、embedded-project-init 均为 **Planned / 未实现**，尚无新的正式 Skill 或项目模板。
 本仓库不收纳其他项目完整源码、公司保密资料、访问密钥或个人敏感资料。
 
 ## 安装 Skill
@@ -123,11 +125,13 @@ Python 3.11+；旧验证需要 PyYAML 6.0.3，新验证和单元测试只用标�
 python -m pip install PyYAML==6.0.3
 python scripts/validate.py
 python scripts/validate_repository.py
+python scripts/validate_embedded_c.py
 python -m unittest discover -s tests -v
 git diff --check
 ```
 
-CI 保留 PR、main/develop/release 和版本 Tag 的触发及旧验证，追加结构验证与测试。
+CI 保留 PR、main/develop/release 和版本 Tag 的触发及旧验证，追加结构、Embedded C 验证与测试。
+Embedded C 示例在 CI 用 GCC 的 C11 严格告警编译并运行边界测试，构建输出位于临时目录。
 存在 CI 不代表已启用分支保护；验证不替代人工规则审查或 Agent 行为验收。
 Git Governance 目录、内容、许可证、v3.0.0 校验和安装入口保持兼容。
 问题反馈通过 [Issue](https://github.com/Mr-Monologue/universal-git-governance/issues)，避免私有资料。

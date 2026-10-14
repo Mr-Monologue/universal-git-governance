@@ -1,0 +1,12 @@
+# Embedded C Coding Standard v0.1: proposed defaults; projects may override.
+BasedOnStyle: LLVM
+IndentWidth: 4
+UseTab: Never
+ColumnLimit: 100
+BreakBeforeBraces: Attach
+PointerAlignment: Right
+DerivePointerAlignment: false
+SortIncludes: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false

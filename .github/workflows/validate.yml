@@ -26,3 +26,13 @@ jobs:
         run: python scripts/validate_repository.py
       - name: Run repository unit tests
         run: python -m unittest discover -s tests -v
+      - name: Validate Embedded C standard
+        run: python scripts/validate_embedded_c.py
+      - name: Compile and run Embedded C example
+        run: |
+          gcc -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Werror \
+            -I standards/embedded-c/examples \
+            standards/embedded-c/examples/adc_scale.c \
+            standards/embedded-c/examples/test_adc_scale.c \
+            -o "$RUNNER_TEMP/adc_scale_test"
+          "$RUNNER_TEMP/adc_scale_test"
