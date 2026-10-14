@@ -28,6 +28,15 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Validate Embedded C standard
         run: python scripts/validate_embedded_c.py
+      - name: Check Embedded C Skill distribution copies
+        run: python scripts/sync_embedded_c_skill.py --check
+      - name: Validate Embedded C Skill
+        run: python scripts/validate_embedded_c_skill.py
+      - name: Compile generated module
+        run: |
+          python skills/embedded-c-module/scripts/new_c_module.py --module sample_module --output "$RUNNER_TEMP/generated module"
+          gcc -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Werror \
+            -c "$RUNNER_TEMP/generated module/sample_module.c" -o "$RUNNER_TEMP/sample_module.o"
       - name: Compile and run Embedded C example
         run: |
           gcc -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Werror \

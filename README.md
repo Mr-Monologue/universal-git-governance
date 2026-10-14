@@ -30,7 +30,9 @@
 [Embedded C Coding Standard](standards/embedded-c/README.md) 已纳入 **Draft v0.1.0**
 规范基线、审查清单与验证示例；Doxygen 为强制要求，其余未冻结的风格保留为建议。
 该草案不代表 MISRA C 合规认证，不自动应用到其他项目。
-embedded-c-module、embedded-project-init 均为 **Planned / 未实现**，尚无新的正式 Skill 或项目模板。
+[embedded-c-module](skills/embedded-c-module/README.md) 为 **Draft / Preview 0.1.0**，
+提供独立分发的模块开发工作流与 C/H 骨架生成器；编码风格尚未冻结。
+embedded-project-init 仍为 **Planned / 未实现**。
 本仓库不收纳其他项目完整源码、公司保密资料、访问密钥或个人敏感资料。
 
 ## 安装 Skill
@@ -126,6 +128,8 @@ python -m pip install PyYAML==6.0.3
 python scripts/validate.py
 python scripts/validate_repository.py
 python scripts/validate_embedded_c.py
+python scripts/sync_embedded_c_skill.py --check
+python scripts/validate_embedded_c_skill.py
 python -m unittest discover -s tests -v
 git diff --check
 ```
