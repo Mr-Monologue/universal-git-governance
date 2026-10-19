@@ -5,7 +5,7 @@
 当前状态：技能索引，包含已发布 Git Governance 与两个 Draft Skill。
 
 - [git-governance](../git-governance/SKILL.md)：Stable · 3.0.0；唯一正式实现保持原路径。
-- [embedded-c-module](embedded-c-module/SKILL.md)：Draft / Preview · 0.1.0；可独立复制的工作流与安全骨架生成器，个人风格未冻结。
+- [embedded-c-module](embedded-c-module/SKILL.md)：Draft / Preview · 0.1.0；可独立复制的工作流与安全骨架生成器，11 项默认风格已批准，Skill 版本状态不变。
 - [embedded-project-init](embedded-project-init/SKILL.md)：Draft / Preview · 0.1.0；三种 Profile 的安全目录初始化与只读验证。完整复制后可独立运行，参见 [安装与 CLI](embedded-project-init/README.md)。不执行 Git，不批准编码风格。
 - [embedded-c-standard](../standards/embedded-c/README.md)：Draft v0.1.0 的 Standard；并非已实现的 Agent Skill。
 

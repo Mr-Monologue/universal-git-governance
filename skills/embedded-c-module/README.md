@@ -2,13 +2,13 @@
 
 [Skill 入口](SKILL.md) 提供新建与维护 C/H 模块的工作流。
 它附带 [规范](references/C_CODING_STANDARD.md)、[审查清单](references/REVIEW_CHECKLIST.md)、
-[待决项](references/OPEN_DECISIONS.md) 与 [修订背景](references/CHANGE_REVIEW.md)。
-Doxygen 强制；其他个人编码风格尚未冻结。没有正式发布 ZIP 或 Release。
+[决策历史](references/OPEN_DECISIONS.md) 与 [修订背景](references/CHANGE_REVIEW.md)。
+Doxygen 强制；11 项默认风格已批准，见规范正文第 16 节。没有正式发布 ZIP 或 Release。
 
-既有正式规则优先；无规则时仅使用 Draft 兼容预设。生成器不解析或改写目标项目配置，
+既有正式规则优先；无规则时使用已批准默认值；Skill 保持 Draft / Preview。生成器不解析或改写目标项目配置，
 其 snake_case 文件名限制不代表所有 API 必须采用该风格；不兼容项目规则时按项目规则手工创建文件。
 [风格评审](references/STYLE_DECISION_REVIEW.md) 与 [C/H 对照](references/examples/style-review/README.md)
-由 standards 同步为只读副本，以保持 OPEN 索引的离线链接可用，不新增人工维护源。
+由 standards 同步为只读副本，以保持决策历史索引的离线链接可用，不新增人工维护源。
 
 ## 独立安装
 
@@ -46,7 +46,8 @@ dry-run 仅读取模板、检查冲突并预览路径/内容概要，绝不创�
 Checklist、待决项和修订说明分别在同一 standards 目录维护；references 全部为只读分发副本。
 在工程体系仓库运行 `python scripts/sync_embedded_c_skill.py` 同步，
 运行 `python scripts/sync_embedded_c_skill.py --check` 逐字节检查，CI 只用后者。
-同步也复制 [LICENSE](LICENSE)，不添加另一份手工规则源。
+同步也复制 [LICENSE](LICENSE) 和 [默认格式配置](references/config/.clang-format)，不添加另一份手工规则源。
+无项目覆盖时可向 clang-format 传入 `--style=file:<Skill目录>/references/config/.clang-format`；不改写目标项目配置。
 独立安装包不需要运行维护同步工具，也不依赖仓库外资源。
 
 轻量验证只检查包结构、frontmatter、链接、模板和副本一致性；不证明业务安全或 Doxygen 全部语义。

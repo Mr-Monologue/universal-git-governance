@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL_PATH = Path('skills/embedded-c-module')
 REFERENCE_NAMES = ('C_CODING_STANDARD.md', 'REVIEW_CHECKLIST.md',
                    'OPEN_DECISIONS.md', 'CHANGE_REVIEW.md', 'STYLE_DECISION_REVIEW.md',
-                   'examples/style-review/README.md')
+                   'examples/style-review/README.md', 'config/.clang-format')
 COPIES = {Path('standards/embedded-c') / name: SKILL_PATH / 'references' / name
           for name in REFERENCE_NAMES}
 COPIES[Path('LICENSE')] = SKILL_PATH / 'LICENSE'

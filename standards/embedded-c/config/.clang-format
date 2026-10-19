@@ -1,8 +1,9 @@
-# Embedded C Coding Standard v0.1: proposed defaults; projects may override.
+# Embedded C Coding Standard v0.1: owner-approved defaults (Task 010, 2026-10-20); projects may override.
 BasedOnStyle: LLVM
 IndentWidth: 4
 UseTab: Never
 ColumnLimit: 100
+BreakStringLiterals: false
 BreakBeforeBraces: Attach
 PointerAlignment: Right
 DerivePointerAlignment: false

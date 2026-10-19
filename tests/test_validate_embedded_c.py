@@ -100,11 +100,11 @@ class EmbeddedCValidationTests(unittest.TestCase):
             (self.module / 'config/.clang-format').unlink()
             self.assertEqual(validator.main(), 1)
 
-    def test_open_decisions_cannot_be_accepted_or_duplicated(self):
+    def test_accepted_decisions_cannot_regress_or_be_duplicated(self):
         for name in ('OPEN_DECISIONS.md', 'STYLE_DECISION_REVIEW.md'):
             path = self.module / name
             original = path.read_text(encoding='utf-8')
-            for text in (original.replace('| OPEN |', '| ACCEPTED |').replace('状态：OPEN', '状态：ACCEPTED'),
+            for text in (original.replace('| ACCEPTED |', '| OPEN |').replace('状态：ACCEPTED', '状态：OPEN'),
                          original.replace('C-STYLE-01', 'C-STYLE-02')):
                 path.write_text(text, encoding='utf-8')
                 self.assertTrue(validator.validate(self.root), name)
@@ -124,11 +124,11 @@ class EmbeddedCValidationTests(unittest.TestCase):
             path.write_text(original, encoding='utf-8')
         self.assertEqual(validator.validate(self.root), [])
 
-    def test_draft_config_label_and_review_links_are_checked(self):
+    def test_actual_format_value_and_review_links_are_checked(self):
         path = self.module / 'config/.clang-format'
         original = path.read_text(encoding='utf-8')
-        path.write_text(original.replace('proposed', 'approved'), encoding='utf-8')
-        self.assertTrue(any('Draft/Proposed' in e for e in validator.validate(self.root)))
+        path.write_text(original.replace('IndentWidth: 4', 'IndentWidth: 8'), encoding='utf-8')
+        self.assertTrue(any('IndentWidth must be 4' in e for e in validator.validate(self.root)))
         path.write_text(original, encoding='utf-8')
         review = self.module / 'examples/style-review/README.md'
         review.write_text(review.read_text(encoding='utf-8') + '\n[Missing](absent.h)\n', encoding='utf-8')

@@ -4,13 +4,13 @@ version: 0.1.0
 status: Draft
 scope: Cross-project / Cross-agent
 language: zh-CN
-updated: 2026-10-15
+updated: 2026-10-20
 ---
 
 # 通用嵌入式 C 编程规范（Embedded C Coding Standard）
 
-> **Draft 适用边界**：Doxygen 强制要求已确定；其他 MUST/SHOULD 表述是项目采用本草案后的规则语义，
-> 不表示用户已经冻结全部风格或全仓库策略。未决项见 [OPEN_DECISIONS.md](OPEN_DECISIONS.md)，
+> **Draft 适用边界**：Doxygen 强制要求保持不变；11 项默认风格已由所有者批准，见第 16 节。
+> 既有项目正式规则优先；批准不构成稳定版发布。历史见 [OPEN_DECISIONS.md](OPEN_DECISIONS.md)，
 > 审查入口见 [REVIEW_CHECKLIST.md](REVIEW_CHECKLIST.md)。
 
 > **定位**：面向个人、团队及 AI Agent 的通用嵌入式 C 开发基线，供 Engineering System 的 `standards/embedded-c/` 使用。本文件不绑定具体 MCU、IDE、RTOS 或商业/开源许可证。
@@ -57,7 +57,7 @@ Profile 是待项目批准的建议，不因本文件存在而自动在其他项
 - **应该**：每个 `.c` 首先包含自己的对应 `.h`，以尽早暴露头文件缺失依赖问题。
 - **应该**：用 `#include <...>` 表示标准/工具链头文件，用 `#include "..."` 表示工程头文件；具体排序由项目格式配置统一。
 - **必须**：不得循环包含造成不透明的依赖耦合；若存在跨模块关系，优先使用接口/前向声明降低依赖。
-- **建议**：对公众 API 统一使用模块前缀，如 `adc_scale_convert_mv()`，防止 C 的全局符号空间冲突。
+- **必须**：对新增公众 API 统一使用模块前缀，如 `adc_scale_convert_mv()`，防止 C 的全局符号空间冲突。
 - **可选**：如头文件同时供 C++ 调用，可提供 `extern "C"` 包装；C-only 项目无须强制。
 
 ### 2.2 头文件防护
@@ -77,16 +77,16 @@ Guard 名应与项目约定一致，避免与第三方库同名；`#pragma once`
 
 ## 3. 格式和命名（可由工具强制）
 
-| 项目 | v0.1 建议默认值 | 说明 |
+| 项目 | v0.1 已批准默认值 | 说明 |
 | --- | --- | --- |
 | 缩进 | 4 个**空格**，不使用 Tab 字符缩进 | 修正原文“4 空格同时使用 Tab”矛盾 |
-| 大括号 | K&R，`{` 通常与条件/函数签名同行 | 可由项目覆盖；不擅自重排历史代码 |
-| 行宽 | 100 列目标宽度 | 比原 80 列更适合现代代码；文档、表格、长 URL 可按需例外 |
+| 大括号 | Attach / K&R，`{` 与条件/函数签名同行 | 可由项目覆盖；不擅自重排历史代码 |
+| 行宽 | 100 列软限制 | 比原 80 列更适合现代代码；项目可选 80/120；字符串、宏、文档链接可按需例外 |
 | 函数/变量 | `snake_case` | 命名表达业务/物理意义，不使用字母堆叠 |
 | 公开函数 | `module_action()` | 统一模块前缀，避免同名冲突 |
 | 宏/枚举值 | `MODULE_UPPER_SNAKE_CASE` | 避免无意义的通用宏名 |
 | 私有静态对象 | 模块内自洽命名即可 | 不强制 `g_`/`p_`/`pf_` |
-| 类型 | 项目统一选择 `module_type` 或 `module_type_t` | `_t` 在部分 POSIX 环境存在名称保留风险，跨平台时需谨慎 |
+| 类型 | 语义化 `module_type`；不普遍使用 `_t` 后缀 | `_t` 在部分 POSIX 环境存在名称保留风险，跨平台时需谨慎 |
 
 **必须**：格式一致性通过仓库批准的 `.clang-format` 执行；不得在 PR 中混入与任务无关的大范围格式化。
 
@@ -113,8 +113,7 @@ Guard 名应与项目约定一致，避免与第三方库同名；`#pragma once`
 #include <limits.h>
 #include <stddef.h>
 
-static bool to_u16(uint32_t value, uint16_t *out)
-{
+static bool to_u16(uint32_t value, uint16_t *out) {
     if ((out == NULL) || (value > UINT16_MAX)) {
         return false;
     }
@@ -321,18 +320,27 @@ cc -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -c module.c
 | 注释格式 | **Doxygen 强制** | 便于 API 契约、提取与自动化检查 |
 | MISRA C checklist | 保留原则，合规以选定标准/工具评估 | 防止误以为“通过自制 Checklist 就合规” |
 
-## 16. 仍待评审冻结的配置决策
+## 16. 已批准的默认风格与项目覆盖
 
-本版虽已明确 Doxygen 的强制地位，仍需由个人/团队一次性批准默认参数，避免将建议误当成历史承诺：
+批准日期：2026-10-20（Asia/Hong_Kong）。批准来源：当前 Task 010 对话中所有者明确回复“批准全部 11 项”，并再次确认。
+Task 010 的 C-01～C-11 与历史 C-STYLE-01～C-STYLE-11 一一对应；历史保留于 [决策索引](OPEN_DECISIONS.md)。
+本节是默认值的唯一规范性维护源；已有项目正式规则、组织合规及目标工程限制优先。
+下表未标“建议”的值为采用本规范且无项目覆盖时的默认要求；C11 与标识符语言为建议。
+批准风格不等于发布稳定版：规范包仍为 Draft 0.1.0，Skill 仍为 Draft / Preview 0.1.0。
 
-| 决策 | v0.1 建议 | 影响 |
+| ID | 已批准默认值 | 项目覆盖与例外 |
 | --- | --- | --- |
-| 行宽与大括号风格 | 100 / K&R | `.clang-format` 默认 Profile |
-| 命名后缀 | 公开 `module_prefix_*`；typedef 不强制 `_t` | C 接口兼容性 |
-| C 语言编译基线 | C11；旧项目可 C99 | 编译器/库生态 |
-| 注释语言 | 默认中文 | 多人协作与海外开源贡献 |
-| Doxygen 门禁范围 | 新维护的公开 API | 渐进引入，不强制第三方 SDK |
-| 静态分析工具 | 由项目选择 clang-tidy、cppcheck 或商用 | CI 和许可证/工具环境 |
+| C-STYLE-01 | Attach / K&R：函数和控制结构左括号同行 | 已有项目风格优先；不做无关重排 |
+| C-STYLE-02 | 4 个空格；不使用制表符缩进 | 项目批准的 .clang-format 执行 |
+| C-STYLE-03 | 100 列软限制 | 项目可选 80/120；不机械拆分字符串、宏和链接 |
+| C-STYLE-04 | snake_case；公开函数/符号使用模块前缀 | 不普遍强制 g_/p_/pf_；保留已有 ABI |
+| C-STYLE-05 | 类型用语义化名称，不普遍使用 _t；宏及枚举常量 UPPER_SNAKE_CASE | 第三方 API、RTOS 和已有类型约定优先；避免保留命名空间 |
+| C-STYLE-06 | 新项目建议 C11；兼容已有 C99；C23 单独验证 | 目标工具链和项目安全认证要求优先 |
+| C-STYLE-07 | 文件/API 必须 Doxygen；个人中文项目默认中文 | 团队/国际项目可用英文；标识符建议英文，参数名与代码一致 |
+| C-STYLE-08 | 变更范围内执行可用格式检查、编译告警、公开 API Doxygen 校验和相关测试 | 缺工具报告 NOT RUN；项目可提高门禁 |
+| C-STYLE-09 | 不默认宣称 MISRA 合规 | 项目选定标准版本、风险等级和偏离流程 |
+| C-STYLE-10 | 默认 variable == constant；不强制 Yoda 条件 | 静态检查、团队约定和可读性优先 |
+| C-STYLE-11 | @file、@brief 和真实版权/许可证；历史使用 Git/Changelog | 不伪造作者、日期；不强制冗长文件历史表；许可证须有实际依据 |
 
 ## 17. 规范来源与进一步参考
 

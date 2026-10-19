@@ -8,6 +8,7 @@ matching this standard's metadata; it does not implement general YAML.
 from pathlib import Path
 import re
 import sys
+import yaml
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,15 +97,15 @@ def check_decisions(text, path, review=False):
         sections = re.findall(r'^## (C-STYLE-\d+) [^\n]*\n(.*?)(?=^## |\Z)', text, re.M | re.S)
         ids = [key for key, _ in sections]
         for key, body in sections:
-            errors.extend(require_text(body, f'{path}:{key}', ('状态：OPEN；推荐：PROPOSED。',)))
+            errors.extend(require_text(body, f'{path}:{key}', ('状态：ACCEPTED；依据：Task 010 所有者批准。',)))
     else:
         rows = [line for line in text.splitlines() if re.match(r'^\| C-STYLE-', line)]
         ids = []
         for line in rows:
             cells = [cell.strip() for cell in line.strip('|').split('|')]
             ids.append(cells[0])
-            if len(cells) != 5 or cells[-2:] != ['OPEN', 'PROPOSED']:
-                errors.append(f'{path}:{cells[0]}: decision must remain OPEN / PROPOSED')
+            if len(cells) != 5 or cells[-2:] != ['ACCEPTED', 'DEFAULT']:
+                errors.append(f'{path}:{cells[0]}: expected ACCEPTED / DEFAULT owner decision')
     if set(ids) != expected or len(ids) != len(expected):
         errors.append(f'{path}: expected exactly C-STYLE-01 through C-STYLE-11')
     errors.extend(check_unapproved_claims(text, path))
@@ -113,11 +114,57 @@ def check_decisions(text, path, review=False):
 
 def check_unapproved_claims(text, path):
     # Catch explicit status assertions; arbitrary prose still needs human review.
-    patterns = (r'C-STYLE-\d+[^\n]*(?:ACCEPTED|APPROVED)',
-                r'(?:K&R|Allman|100\s*列|4\s*空格|snake_case|C11)[^\n。;；]*(?:已批准|已冻结|全局强制)',
+    patterns = (r'(?:K&R|Allman|100\s*列|4\s*空格|snake_case|C11)[^\n。;；]*全局强制',
                 r'Doxygen\s*(?:是|为|：|:)?\s*(?:可选|非强制|optional)')
     return [f'{path}: conflicting approval/Doxygen assertion: {match.group(0)}'
             for pattern in patterns for match in re.finditer(pattern, text, re.I)]
+
+
+# Regression expectations for the owner's approved defaults and their exceptions.
+# These are validation assertions, not a second editable distribution of the policy.
+APPROVED = (
+    (('Attach / K&R', '函数和控制结构左括号同行'), ('已有项目风格优先', '不做无关重排')),
+    (('4 个空格', '不使用制表符缩进'), ('.clang-format',)),
+    (('100 列软限制',), ('80/120', '不机械拆分字符串、宏和链接')),
+    (('snake_case', '公开函数/符号使用模块前缀'), ('不普遍强制 g_/p_/pf_', '保留已有 ABI')),
+    (('类型用语义化名称', '不普遍使用 _t', 'UPPER_SNAKE_CASE'), ('第三方 API、RTOS', '保留命名空间')),
+    (('建议 C11', '兼容已有 C99', 'C23 单独验证'), ('目标工具链', '安全认证')),
+    (('文件/API 必须 Doxygen', '个人中文项目默认中文'), ('可用英文', '参数名与代码一致')),
+    (('可用格式检查', '编译告警', '公开 API Doxygen 校验', '相关测试'), ('NOT RUN', '提高门禁')),
+    (('不默认宣称 MISRA 合规',), ('标准版本', '风险等级', '偏离流程')),
+    (('variable == constant', '不强制 Yoda'), ('静态检查', '团队约定', '可读性')),
+    (('@file', '@brief', '真实版权/许可证', 'Git/Changelog'), ('不伪造作者、日期', '不强制冗长', '实际依据')),
+)
+
+
+def check_approved_defaults(text, path):
+    sections = re.findall(r'^## 16\..*?\n(.*?)(?=^## |\Z)', text, re.M | re.S)
+    if len(sections) != 1:
+        return [f'{path}: missing unique approved defaults section']
+    rows = [line.strip('|').split('|') for line in sections[0].splitlines()
+            if re.match(r'^\| C-STYLE-', line)]
+    errors = require_text(sections[0], path, ('2026-10-20', '批准全部 11 项', '已有项目正式规则'))
+    ids = [cells[0].strip() for cells in rows]
+    if ids != [f'C-STYLE-{i:02}' for i in range(1, 12)]:
+        errors.append(f'{path}: approved defaults must contain ordered unique 11 decisions')
+    for i, (default, exceptions) in enumerate(APPROVED):
+        if i >= len(rows) or len(rows[i]) != 3:
+            errors.append(f'{path}: invalid approved decision row {i + 1}')
+            continue
+        errors.extend(require_text(rows[i][1], f'{path}:C-STYLE-{i+1:02}', default))
+        errors.extend(require_text(rows[i][2], f'{path}:C-STYLE-{i+1:02}:exceptions', exceptions))
+    return errors
+
+
+def check_format_config(text):
+    try:
+        data = yaml.safe_load(text)
+    except yaml.YAMLError as error:
+        return [f'.clang-format: invalid YAML: {error}']
+    expected = {'IndentWidth': 4, 'UseTab': 'Never', 'ColumnLimit': 100,
+                'BreakBeforeBraces': 'Attach', 'BreakStringLiterals': False}
+    return [f'.clang-format: {key} must be {value}' for key, value in expected.items()
+            if not isinstance(data, dict) or data.get(key) != value]
 
 
 def check_doxygen_standard(text, path):
@@ -150,10 +197,11 @@ def validate(root: Path) -> list[str]:
         if name == 'C_CODING_STANDARD.md':
             errors.extend(check_metadata(text))
             errors.extend(check_doxygen_standard(text, name))
+            errors.extend(check_approved_defaults(text, name))
         if name in ('OPEN_DECISIONS.md', 'STYLE_DECISION_REVIEW.md'):
             errors.extend(check_decisions(text, name, review=name.startswith('STYLE_')))
-        if name == 'config/.clang-format' and not re.search(r'(?i)draft|proposed', text):
-            errors.append(f'{name}: configuration must remain Draft/Proposed')
+        if name == 'config/.clang-format':
+            errors.extend(check_format_config(text))
         if name == 'examples/adc_scale.h':
             errors.extend(check_doxygen_block(text, name, ('@param[in] raw_code', '@param[in] full_scale_code',
                           '@param[in] reference_mv', '@param[out] result_mv', '@retval ADC_SCALE_OK',
@@ -177,7 +225,7 @@ def main() -> int:
         for error in errors:
             print(f'FAIL: {error}', file=sys.stderr)
         return 1
-    print(f'PASS: {len(REQUIRED)} Embedded C files; Markdown links/fences; OPEN/PROPOSED decisions; Draft 0.1.0 metadata; '
+    print(f'PASS: {len(REQUIRED)} Embedded C files; Markdown links/fences; 11 ACCEPTED defaults and format values; Draft 0.1.0 metadata; '
           '3 Doxygen file-header smoke checks (not full semantics or MISRA compliance)')
     return 0
 

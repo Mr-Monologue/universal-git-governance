@@ -278,7 +278,7 @@ def run(keep=False, verbose=False, compiler=None, doxygen=None):
                 safety(base, fixture, target, evidence)
                 text = (ROOT / 'standards/embedded-c/OPEN_DECISIONS.md').read_text(encoding='utf-8')
                 require(not check_decisions(text, 'OPEN_DECISIONS.md'), 'Decision status changed')
-                evidence.add('policy', '11 OPEN / PROPOSED decisions', 'PASS')
+                evidence.add('policy', '11 ACCEPTED owner decisions', 'PASS')
             except (OSError, ValueError, subprocess.SubprocessError) as error:
                 evidence.add('workflow', 'E2E interrupted', 'FAIL', str(error))
                 evidence.add('workflow', 'remaining dependent steps', 'NOT RUN', 'stopped after failure')

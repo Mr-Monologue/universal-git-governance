@@ -1,10 +1,12 @@
 # Embedded C 风格决策评审 — Draft 0.1.0
 
-本轮是稳定化准备，不是规范冻结。所有推荐为 **PROPOSED**，所有个人决策保持 **OPEN**。
+Task 006 审议时所有推荐为 PROPOSED、决策为 OPEN。2026-10-20 所有者在 Task 010 明确“批准全部 11 项”。
+以下技术分析保留为历史快照；其中“当前行为”“推荐”“将来影响”描述 Task 006 时点。
+现行批准值及覆盖策略统一以 [规范正文第 16 节](C_CODING_STANDARD.md#16-已批准的默认风格与项目覆盖) 为准。
 Doxygen 文件、公开 API、公开类型及相关接口契约为既定强制要求，不能被文本语言或排版选择降级。
 [决策索引](OPEN_DECISIONS.md) / [实际 C/H 对照](examples/style-review/README.md)。
 
-## 审阅依据和现状
+## Task 006 审阅依据和当时现状
 
 原始输入为 Task 002 包 `Engineering_System_Task002_Bundle.zip` 的 `inputs/original-checklist.md`，
 内容标题《MISRA C和C语言编程规范check list》，本次完整只读复核。
@@ -19,7 +21,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-01 — 大括号
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：正文第 3 节建议 K&R，配置实际为 `BreakBeforeBraces: Attach`；ADC 函数和控制块均同行。
 - 原 Checklist：“控制流与结构”“函数设计与模块化”示例多为同行大括号，但没有统一规范性选择。
@@ -30,7 +32,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-02 — 缩进与 Tab
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：`IndentWidth: 4`、`UseTab: Never`；C/H 骨架使用空格。没有显式冻结 TabWidth。
 - 原 Checklist：“C语言编程规范Check list / 缩进和代码风格”同时写“4个空格”和“使用tab”；文件头示例另写 1 tab == 4 spaces。视觉宽度与存储字符被混在一起。
@@ -41,7 +43,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-03 — 行宽
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：候选 ColumnLimit=100；正文允许文档、长 URL 等合理例外。
 - 原 Checklist：“缩进和代码风格”要求不超过 80 列；“函数声明和定义”要求长参数换行。
@@ -52,7 +54,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-04 — 标识符命名
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：公开 `adc_scale_convert_mv` 有模块前缀，变量 snake_case，枚举值 ADC_SCALE_*；无全局可变对象。生成器只接受小写 snake_case 文件名。
 - 原 Checklist：“命名规范”要求全局 g_、局部小写下划线、指针 p_、函数指针 pf_、宏和枚举项大写；“宏定义和枚举”重复大写约定。
@@ -63,7 +65,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-05 — 类型约定
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：`adc_scale_status` typedef 无 _t；参数使用 uint16_t/uint32_t，乘法中间量 uint64_t；不假定枚举的 ABI 宽度。
 - 原 Checklist：“基本语法与数据类型”要求固定长度类型；“命名规范”要求枚举变量 _T、typedef _t。变量后缀与类型后缀应分别决定。
@@ -74,7 +76,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-06 — C 语言版本
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：宿主 GCC 测试显式使用 C11；正文允许受限项目 C99、C23 显式选择，未更改 MCU 工具链。
 - 原 Checklist：“基本语法与数据类型”只要求标准 C，没有指定年代版本。
@@ -85,7 +87,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-07 — Doxygen 注释语言
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：规范及 ADC 契约中文，标识符和 Doxygen 标签英文；文件模板使用中文 brief。
 - 原 Checklist：“注释与文档”要求注释清晰并符合项目风格，例子中英文混合，未正式选择文本语言。
@@ -96,7 +98,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-08 — 质量门禁
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：宿主示例使用 C11、Wall/Wextra/Wpedantic/Wconversion/Wsign-conversion/Werror；CI 保留编译和 Python 检查。格式配置已存在，Doxygen 尚无统一目标项目配置。
 - 原 Checklist：“防御性编程与安全性”要求静态分析；“缩进和代码风格”要求统一排版，没有给出 clang-format 版本或具体告警集。
@@ -107,7 +109,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-09 — MISRA / 安全性层级
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：规范不声明 MISRA 合规；general-embedded、hard-realtime、safety-critical、legacy-compatible 均是待项目选择的 Profile。
 - 原 Checklist：标题包含 MISRA；“防御性编程与安全性”要求静态分析；文件头示例建议关键嵌入式系统遵循 MISRA，但没有版本、规则映射或偏离台账。
@@ -118,7 +120,7 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-10 — 条件比较方向（保留历史未决项）
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：ADC 使用变量在左的比较；原 Checklist“条件判断”要求常数在 == 左侧。
 - 推荐：语义自然的变量在左候选，配合编译器告警；替代为项目统一常量在左。
@@ -127,14 +129,14 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 
 ## C-STYLE-11 — 文件头元数据（保留历史未决项）
 
-状态：OPEN；推荐：PROPOSED。
+状态：ACCEPTED；依据：Task 010 所有者批准。
 
 - 当前行为：模板只有真实文件名、brief 和职责，不自动生成作者、日期、许可证。原 Checklist“文件头注释检查”要求作者、版本、时间戳和历史表。
 - 推荐：真实许可证按项目要求维护，Git 记录历史；替代为法规/交付要求下额外维护元数据。
 - 权衡及理由：重复历史易过期，但正式交付要求优先；无论选择哪种都禁止虚构身份或许可证。
 - 将来影响：文件头模板、交付检查和项目文档规则；本轮不添加自动元数据。
 
-## 工程一致性与分发决定
+## Task 006 工程一致性与分发决定（历史）
 
 本文件及代码对照只在 standards 人工维护。为满足 OPEN 索引的相对链接及离线可读性，
 两份 Markdown 经已有同步脚本生成只读 references 副本；不分发编译输出、不引入第二人工源。
@@ -142,6 +144,6 @@ Skill 生成器仅产出无业务函数的 C/H 骨架，限制的是文件名 sn
 现有配置、模板排版和生成器 CLI 不变，Skill README 补充项目规则优先及 Draft 预设边界。
 
 新增只读检查仅保护明确状态字段和契约标记，不能理解任意自然语言、证明所有函数契约完整或判定 MISRA 合规。
-未来用户批准某项后，需要在独立授权变更中同时更新决策状态及验证预期，本轮不得自行标成已批准。
+Task 010 已按用户批准更新状态及验证预期；上述“未批准”等表述仅为历史审议条件，不是当前状态。
 排版选项解释见 [ClangFormat 官方说明](https://clang.llvm.org/docs/ClangFormatStyleOptions.html)；
 _t 保留边界见 [POSIX 名称空间 2.2.2](https://pubs.opengroup.org/onlinepubs/9799919799/functions/V2_chap02.html)。

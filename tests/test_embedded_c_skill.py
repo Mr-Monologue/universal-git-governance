@@ -216,7 +216,7 @@ class EmbeddedCSkillTests(unittest.TestCase):
         path = self.skill / 'assets/module.h.tpl'
         original = path.read_text(encoding='utf-8')
         for text in (original.replace('/**', '/*'), original.replace('Draft', 'Stable'),
-                     original + '\n/* C-STYLE-01: ACCEPTED */\n'):
+                     original + '\n/* K&R 全局强制 */\n'):
             path.write_text(text, encoding='utf-8')
             before = path.read_bytes()
             self.assertTrue(any('module.h.tpl' in e for e in validator.validate(self.skill)))

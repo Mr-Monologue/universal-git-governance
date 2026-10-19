@@ -1,6 +1,7 @@
-# C/H 风格对照 — Draft / PROPOSED
+# C/H 风格对照 — 历史审议夹具
 
-所有排版和命名方案均为 OPEN，示例不批准任何风格；Doxygen 强制要求不变。
+Task 006 时方案均为 OPEN；Task 010 已批准 Attach、4 空格、100 列等默认值。
+本页保留 Allman、80/120 等历史及项目覆盖对照，不能把所有替代方案都当作默认值；Doxygen 强制要求不变。
 [完整评审](../../STYLE_DECISION_REVIEW.md) / [决策索引](../../OPEN_DECISIONS.md)。
 
 以下都是同一接口和算法：输出 min(sample_mv, ceiling_mv)，有效电压为 0–5000 mV。
