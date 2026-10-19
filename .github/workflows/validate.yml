@@ -38,6 +38,8 @@ jobs:
         run: python scripts/validate_embedded_project_skill.py
       - name: Validate Skill distribution foundation
         run: python scripts/validate_skill_distribution.py
+      - name: Validate isolated cross-Skill workflows
+        run: python scripts/validate_skill_e2e.py --verbose
       - name: Package all catalog Skills locally
         run: |
           python scripts/skill_dist.py list

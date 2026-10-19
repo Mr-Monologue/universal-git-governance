@@ -31,6 +31,7 @@
 规范基线、审查清单与验证示例；Doxygen 为强制要求，其余未冻结的风格保留为建议。
 该草案不代表 MISRA C 合规认证，不自动应用到其他项目。
 [风格决策评审](standards/embedded-c/STYLE_DECISION_REVIEW.md) 提供技术建议与 C/H 对照，所有未批准项保持 OPEN。
+[Skill E2E 验证](handbook/agent-skill-e2e-validation.md) 串联隔离分发、Firmware/Robotics 初始化与 C/H 生成；运行 `python scripts/validate_skill_e2e.py`，真实 Agent 调用单独记录。
 [embedded-c-module](skills/embedded-c-module/README.md) 为 **Draft / Preview 0.1.0**，
 提供独立分发的模块开发工作流与 C/H 骨架生成器；编码风格尚未冻结。
 [embedded-project-init](skills/embedded-project-init/README.md) 为 **Draft / Preview 0.1.0**，
