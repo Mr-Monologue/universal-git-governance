@@ -4,6 +4,8 @@
 执行脚本成功、读取 SKILL.md 或 Agent 自称使用了 Skill，均不能单独证明原生发现与调用。
 本轮 Task 008 为 **PARTIAL / BLOCKED**：准备和回归完成，原生会话启动被本机访问权限阻断。
 
+后续跟踪见 [Task 009 恢复与权限定位](native-agent-skill-recovery.md)。该跟踪不改写 Task 008 的阻断事实；普通用户终端原生复验仍待实际执行。
+
 ## 环境与隔离准备
 
 - 本轮环境：Windows、Codex CLI `0.162.0-alpha.17.2`；使用本机已有程序，不安装/升级工具。
