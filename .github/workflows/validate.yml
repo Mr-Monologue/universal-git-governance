@@ -36,6 +36,14 @@ jobs:
         run: python scripts/sync_embedded_project_skill.py --check
       - name: Validate Embedded Project Skill
         run: python scripts/validate_embedded_project_skill.py
+      - name: Validate Skill distribution foundation
+        run: python scripts/validate_skill_distribution.py
+      - name: Package all catalog Skills locally
+        run: |
+          python scripts/skill_dist.py list
+          for skill in git-governance embedded-c-module embedded-project-init; do
+            python scripts/skill_dist.py pack --skill "$skill" --output-dir "$RUNNER_TEMP/skill packages"
+          done
       - name: Exercise standalone project Skill
         run: |
           cp -R skills/embedded-project-init "$RUNNER_TEMP/project skill"

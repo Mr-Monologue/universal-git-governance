@@ -40,6 +40,10 @@
 
 ## 安装 Skill
 
+三个 Skill 的统一发现、可重现打包与受控安装见 [分发与兼容性手册](handbook/agent-skills-distribution.md)
+及 [Skill Catalog](catalog/skills.json)。`python scripts/skill_dist.py list` 可查看状态；
+安装、升级、移除默认仅预览，必须指定目标并显式 `--apply` 才会修改。下述 v3.0.0 旧安装入口保持兼容。
+
 从 [v3.0.0 发布页](https://github.com/Mr-Monologue/universal-git-governance/releases/tag/v3.0.0)
 下载 `git-governance-v3.0.0.zip`。解压后顶层直接是 `git-governance/`，无需再剥离包装目录。
 整个目录一起复制，不能只复制 `SKILL.md`。安装包同时保留 MIT 许可证。
@@ -135,6 +139,7 @@ python scripts/sync_embedded_c_skill.py --check
 python scripts/validate_embedded_c_skill.py
 python scripts/sync_embedded_project_skill.py --check
 python scripts/validate_embedded_project_skill.py
+python scripts/validate_skill_distribution.py
 python -m unittest discover -s tests -v
 git diff --check
 ```

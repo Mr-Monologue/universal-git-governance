@@ -10,3 +10,6 @@
 - [embedded-c-standard](../standards/embedded-c/README.md)：Draft v0.1.0 的 Standard；并非已实现的 Agent Skill。
 
 返回 [工程体系入口](../README.md)。
+
+统一分发登记见 [Catalog](../catalog/skills.json)；打包、显式目标安装、完整性校验、升级与安全移除见
+[分发与跨 Agent 兼容性手册](../handbook/agent-skills-distribution.md)。两个 Draft Skill 的状态不因分发而改变。

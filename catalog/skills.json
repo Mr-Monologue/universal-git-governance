@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "skills": [
+    {"name": "git-governance", "source_dir": "git-governance", "channel": "stable", "description": "Git 分支、提交、集成和发布治理", "installable": true},
+    {"name": "embedded-c-module", "source_dir": "skills/embedded-c-module", "channel": "preview", "description": "Draft 嵌入式 C 模块工作流与 C/H 骨架生成", "installable": true},
+    {"name": "embedded-project-init", "source_dir": "skills/embedded-project-init", "channel": "preview", "description": "Draft 三种 Profile 的安全工程目录初始化", "installable": true}
+  ]
+}
