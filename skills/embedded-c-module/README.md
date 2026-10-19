@@ -5,6 +5,11 @@
 [待决项](references/OPEN_DECISIONS.md) 与 [修订背景](references/CHANGE_REVIEW.md)。
 Doxygen 强制；其他个人编码风格尚未冻结。没有正式发布 ZIP 或 Release。
 
+既有正式规则优先；无规则时仅使用 Draft 兼容预设。生成器不解析或改写目标项目配置，
+其 snake_case 文件名限制不代表所有 API 必须采用该风格；不兼容项目规则时按项目规则手工创建文件。
+[风格评审](references/STYLE_DECISION_REVIEW.md) 与 [C/H 对照](references/examples/style-review/README.md)
+由 standards 同步为只读副本，以保持 OPEN 索引的离线链接可用，不新增人工维护源。
+
 ## 独立安装
 
 需要时由使用者将完整 `embedded-c-module/` 复制到目标 Agent 支持的技能目录，例如项目的

@@ -201,6 +201,29 @@ class EmbeddedCSkillTests(unittest.TestCase):
             result = subprocess.run([sys.executable, str(script), *args], capture_output=True, text=True)
             self.assertEqual(result.returncode, expected, result.stderr)
 
+    def test_skill_policy_cannot_weaken_doxygen_or_override_project(self):
+        path = self.skill / 'SKILL.md'
+        original = path.read_text(encoding='utf-8')
+        for old, new in [('Doxygen 是强制要求', 'Doxygen 是可选'),
+                         ('既有正式规则优先', '候选规则覆盖项目规则'),
+                         ('目标项目无正式规则时', '所有项目一律')]:
+            path.write_text(original.replace(old, new), encoding='utf-8')
+            self.assertTrue(any('SKILL.md' in e for e in validator.validate(self.skill)))
+        path.write_text(original, encoding='utf-8')
+        self.assertEqual(validator.validate(self.skill), [])
+
+    def test_template_doxygen_draft_and_false_approval_are_checked(self):
+        path = self.skill / 'assets/module.h.tpl'
+        original = path.read_text(encoding='utf-8')
+        for text in (original.replace('/**', '/*'), original.replace('Draft', 'Stable'),
+                     original + '\n/* C-STYLE-01: ACCEPTED */\n'):
+            path.write_text(text, encoding='utf-8')
+            before = path.read_bytes()
+            self.assertTrue(any('module.h.tpl' in e for e in validator.validate(self.skill)))
+            self.assertEqual(path.read_bytes(), before)
+        path.write_text(original, encoding='utf-8')
+        self.assertEqual(validator.validate(self.skill), [])
+
 
 if __name__ == '__main__':
     unittest.main()

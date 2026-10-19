@@ -8,6 +8,8 @@
 - [REVIEW_CHECKLIST.md](REVIEW_CHECKLIST.md)：用于 Code Review/Agent 自检的任务验收清单。
 - [CHANGE_REVIEW.md](CHANGE_REVIEW.md)：保留原 Checklist 语义，说明规则调整依据与集成修复。
 - [OPEN_DECISIONS.md](OPEN_DECISIONS.md)：尚未冻结的个人风格和原 Checklist 差异。
+- [STYLE_DECISION_REVIEW.md](STYLE_DECISION_REVIEW.md)：11 项 OPEN / PROPOSED 决策及技术权衡。
+- [C/H 风格对照](examples/style-review/README.md)：同一契约的括号、列宽、命名及前置条件演示。
 - [config/.clang-format](config/.clang-format)：建议格式设置，已用 clang-format 20.1.1 验证本目录示例，非全仓库强制。
 - `examples/adc_scale.{h,c}` 和 `examples/test_adc_scale.c`：带 Doxygen API 的宿主机示例和边界测试。
 

@@ -6,6 +6,6 @@
 #ifndef ${guard}
 #define ${guard}
 
-/* 在此添加真实公开声明及对应 Doxygen 契约。 */
+/* Draft 骨架；项目正式规则优先。在此添加真实公开声明及对应 Doxygen 契约。 */
 
 #endif /* ${guard} */

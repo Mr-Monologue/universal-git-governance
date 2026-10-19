@@ -100,6 +100,40 @@ class EmbeddedCValidationTests(unittest.TestCase):
             (self.module / 'config/.clang-format').unlink()
             self.assertEqual(validator.main(), 1)
 
+    def test_open_decisions_cannot_be_accepted_or_duplicated(self):
+        for name in ('OPEN_DECISIONS.md', 'STYLE_DECISION_REVIEW.md'):
+            path = self.module / name
+            original = path.read_text(encoding='utf-8')
+            for text in (original.replace('| OPEN |', '| ACCEPTED |').replace('状态：OPEN', '状态：ACCEPTED'),
+                         original.replace('C-STYLE-01', 'C-STYLE-02')):
+                path.write_text(text, encoding='utf-8')
+                self.assertTrue(validator.validate(self.root), name)
+            path.write_text(original, encoding='utf-8')
+        self.assertEqual(validator.validate(self.root), [])
+
+    def test_doxygen_mandate_and_contract_removal_fail(self):
+        for name, token in [('C_CODING_STANDARD.md', '**本章为强制基线**'),
+                            ('examples/adc_scale.h', '@param[out]'),
+                            ('examples/adc_scale.h', '@retval ADC_SCALE_INVALID_ARG')]:
+            path = self.module / name
+            original = path.read_text(encoding='utf-8')
+            path.write_text(original.replace(token, 'removed'), encoding='utf-8')
+            before = path.read_bytes()
+            self.assertTrue(any(name in item for item in validator.validate(self.root)))
+            self.assertEqual(path.read_bytes(), before)
+            path.write_text(original, encoding='utf-8')
+        self.assertEqual(validator.validate(self.root), [])
+
+    def test_draft_config_label_and_review_links_are_checked(self):
+        path = self.module / 'config/.clang-format'
+        original = path.read_text(encoding='utf-8')
+        path.write_text(original.replace('proposed', 'approved'), encoding='utf-8')
+        self.assertTrue(any('Draft/Proposed' in e for e in validator.validate(self.root)))
+        path.write_text(original, encoding='utf-8')
+        review = self.module / 'examples/style-review/README.md'
+        review.write_text(review.read_text(encoding='utf-8') + '\n[Missing](absent.h)\n', encoding='utf-8')
+        self.assertTrue(any('invalid local link' in e for e in validator.validate(self.root)))
+
 
 if __name__ == '__main__':
     unittest.main()

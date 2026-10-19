@@ -13,7 +13,8 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = Path('standards/embedded-c')
 DOCUMENTS = ('README.md', 'C_CODING_STANDARD.md', 'REVIEW_CHECKLIST.md',
-             'CHANGE_REVIEW.md', 'OPEN_DECISIONS.md')
+             'CHANGE_REVIEW.md', 'OPEN_DECISIONS.md', 'STYLE_DECISION_REVIEW.md',
+             'examples/style-review/README.md')
 EXAMPLES = ('adc_scale.h', 'adc_scale.c', 'test_adc_scale.c')
 REQUIRED = (*DOCUMENTS, 'config/.clang-format',
             *(f'examples/{name}' for name in EXAMPLES))
@@ -82,6 +83,54 @@ def check_metadata(text: str) -> list[str]:
     return errors
 
 
+def require_text(text, path, fragments):
+    """Bounded regression assertions, not natural-language policy interpretation."""
+    return [f'{path}: missing required policy/contract fragment: {part}'
+            for part in fragments if part not in text]
+
+
+def check_decisions(text, path, review=False):
+    errors = []
+    expected = {f'C-STYLE-{i:02}' for i in range(1, 12)}
+    if review:
+        sections = re.findall(r'^## (C-STYLE-\d+) [^\n]*\n(.*?)(?=^## |\Z)', text, re.M | re.S)
+        ids = [key for key, _ in sections]
+        for key, body in sections:
+            errors.extend(require_text(body, f'{path}:{key}', ('状态：OPEN；推荐：PROPOSED。',)))
+    else:
+        rows = [line for line in text.splitlines() if re.match(r'^\| C-STYLE-', line)]
+        ids = []
+        for line in rows:
+            cells = [cell.strip() for cell in line.strip('|').split('|')]
+            ids.append(cells[0])
+            if len(cells) != 5 or cells[-2:] != ['OPEN', 'PROPOSED']:
+                errors.append(f'{path}:{cells[0]}: decision must remain OPEN / PROPOSED')
+    if set(ids) != expected or len(ids) != len(expected):
+        errors.append(f'{path}: expected exactly C-STYLE-01 through C-STYLE-11')
+    errors.extend(check_unapproved_claims(text, path))
+    return errors
+
+
+def check_unapproved_claims(text, path):
+    # Catch explicit status assertions; arbitrary prose still needs human review.
+    patterns = (r'C-STYLE-\d+[^\n]*(?:ACCEPTED|APPROVED)',
+                r'(?:K&R|Allman|100\s*列|4\s*空格|snake_case|C11)[^\n。;；]*(?:已批准|已冻结|全局强制)',
+                r'Doxygen\s*(?:是|为|：|:)?\s*(?:可选|非强制|optional)')
+    return [f'{path}: conflicting approval/Doxygen assertion: {match.group(0)}'
+            for pattern in patterns for match in re.finditer(pattern, text, re.I)]
+
+
+def check_doxygen_standard(text, path):
+    return require_text(text, path, ('## 10. Doxygen 文档规范（强制）', '**本章为强制基线**',
+                        '公开 `struct/enum/typedef`', '@param[in]', '@param[out]', '@retval',
+                        '单位', '范围', 'ISR/RTOS/DMA API')) + check_unapproved_claims(text, path)
+
+
+def check_doxygen_block(text, path, fragments):
+    blocks = '\n'.join(re.findall(r'/\*\*(.*?)\*/', text, re.S))
+    return require_text(blocks, path, fragments)
+
+
 def validate(root: Path) -> list[str]:
     root = root.resolve()
     module = root / MODULE
@@ -100,7 +149,16 @@ def validate(root: Path) -> list[str]:
             errors.extend(check_document(path, root, text))
         if name == 'C_CODING_STANDARD.md':
             errors.extend(check_metadata(text))
-        if name.startswith('examples/'):
+            errors.extend(check_doxygen_standard(text, name))
+        if name in ('OPEN_DECISIONS.md', 'STYLE_DECISION_REVIEW.md'):
+            errors.extend(check_decisions(text, name, review=name.startswith('STYLE_')))
+        if name == 'config/.clang-format' and not re.search(r'(?i)draft|proposed', text):
+            errors.append(f'{name}: configuration must remain Draft/Proposed')
+        if name == 'examples/adc_scale.h':
+            errors.extend(check_doxygen_block(text, name, ('@param[in] raw_code', '@param[in] full_scale_code',
+                          '@param[in] reference_mv', '@param[out] result_mv', '@retval ADC_SCALE_OK',
+                          '@retval ADC_SCALE_INVALID_ARG', '@note', 'mV', '范围')))
+        if name in {f'examples/{item}' for item in EXAMPLES}:
             blocks = re.findall(r'/\*\*(.*?)\*/', text, re.S)
             file_header = any(
                 re.search(r'@file\s+' + re.escape(path.name) + r'(?=\s|$)', block)
@@ -119,7 +177,7 @@ def main() -> int:
         for error in errors:
             print(f'FAIL: {error}', file=sys.stderr)
         return 1
-    print('PASS: 9 Embedded C files; Markdown links/fences; Draft 0.1.0 metadata; '
+    print(f'PASS: {len(REQUIRED)} Embedded C files; Markdown links/fences; OPEN/PROPOSED decisions; Draft 0.1.0 metadata; '
           '3 Doxygen file-header smoke checks (not full semantics or MISRA compliance)')
     return 0
 
