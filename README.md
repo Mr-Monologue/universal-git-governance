@@ -32,7 +32,10 @@
 该草案不代表 MISRA C 合规认证，不自动应用到其他项目。
 [风格决策评审](standards/embedded-c/STYLE_DECISION_REVIEW.md) 提供技术建议与 C/H 对照，保留历史审议及 11 项 ACCEPTED 状态。
 [Skill E2E 验证](handbook/agent-skill-e2e-validation.md) 串联隔离分发、Firmware/Robotics 初始化与 C/H 生成；运行 `python scripts/validate_skill_e2e.py`，真实 Agent 调用单独记录。
-[原生 Agent 验收](handbook/native-agent-skill-acceptance.md) 区分发现、调用与产物证据；Task 008 原生启动受阻，当前为 PARTIAL/BLOCKED。
+[原生 Agent 验收](handbook/native-agent-skill-acceptance.md) 区分发现、调用与产物证据；
+[Task 011 收口索引](handbook/skill-native-acceptance-summary.md) 记录 Codex C01—C04 PASS 及原始 C02 日志损坏限制，保留 Task 008 失败历史。
+[稳定候选评审](handbook/skill-stable-readiness.md) 与 [发行准备](handbook/release-candidate-notes.md)
+仅为评审和提案，不代表 Stable 或 Release 批准。
 [embedded-c-module](skills/embedded-c-module/README.md) 为 **Draft / Preview 0.1.0**，
 提供独立分发的模块开发工作流与 C/H 骨架生成器；使用已批准默认风格，Skill 仍为 Draft / Preview。
 [embedded-project-init](skills/embedded-project-init/README.md) 为 **Draft / Preview 0.1.0**，

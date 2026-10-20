@@ -11,7 +11,7 @@
 
 Git Governance v3.0.0 原发行包、许可证、内容和旧安装入口保持原样。
 这里生成的是同一源码的新增可重现打包方式，不替换历史发行 ZIP，也不保证与旧 ZIP 字节相同。
-两个 Draft Skill 不因可安装而成为 Stable。C 规范待决风格继续 OPEN，Doxygen 强制原则不变。
+两个 Draft Skill 不因可安装而成为 Stable。11 项 C 默认风格已在 Task 010 批准为 ACCEPTED，Doxygen 强制原则不变。
 
 ## 使用前提与命令
 
@@ -105,6 +105,8 @@ Copilot 可明确要求使用指定 Skill，并检查其实际读取的文件和
 原 Git Governance 的 Cursor 适配文件随包保留；本工具不将其自动写入目标 `.cursor/rules/`。
 
 ## 验证与证据分层
+
+下表原生状态为 Task 005 历史记录；当前 Codex 结论见 [原生验收收口](skill-native-acceptance-summary.md)，Cursor/Copilot 仍 NOT RUN。
 
 ```powershell
 python scripts/validate_skill_distribution.py

@@ -240,3 +240,8 @@ git --no-optional-locks -C "$AcceptanceRoot\git-fixture" remote -v
 只有三层证据齐备且隔离检查通过才改对应场景为 PASS；失败时保留现场，不自动删目录或循环重试。
 Cursor/Copilot 仍 NOT RUN。普通终端原生验收完成前不建议宣称稳定发布就绪；升级 Stable 仍需独立授权。
 本轮准备与文档本地提交后停止，不执行 Task 012。
+
+## Task 012 收口索引
+
+上文保留当时的准备状态与失败历史，不应再运行旧 Out-File 采集流程。后续原生 C01—C04 已完成，
+当前结论及来源限制见 [原生验收收口](skill-native-acceptance-summary.md)，本轮不重放。

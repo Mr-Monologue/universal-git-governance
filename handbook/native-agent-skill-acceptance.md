@@ -140,3 +140,8 @@ Task 011 独立现场已准备，当前为 **PARTIAL / USER ACTION REQUIRED**。
 C02、C03、C04 的 DISCOVERED / INVOKED / OUTPUT_VERIFIED 均 NOT RUN；自动化回归 PASS 不代替原生行为。
 完整命令、明确提示词、隔离哈希及稳定候选评估见 [Task 011 验收报告](task011-native-skill-acceptance.md)。
 Cursor/Copilot 尚未验证；两个 Embedded Skill 保持 Draft 0.1.0，11 项风格保持 ACCEPTED。
+
+## Task 012 收口索引
+
+上文保留当时的准备状态与失败历史，不应再运行旧 Out-File 采集流程。后续原生 C01—C04 已完成，
+当前结论及来源限制见 [原生验收收口](skill-native-acceptance-summary.md)，本轮不重放。
