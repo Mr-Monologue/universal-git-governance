@@ -1,0 +1,18 @@
+{
+  "id": "firmware",
+  "description": "纯嵌入式固件：需求、参考资料、系统设计、固件、验证和工具。",
+  "schema_version": 1,
+  "directories": [
+    "00_Project_Management/Planning",
+    "00_Project_Management/Requirements",
+    "00_Reference/Datasheets",
+    "01_System_Design/Interface_Definitions",
+    "01_System_Design/Specifications",
+    "05_Firmware/Applications",
+    "05_Firmware/Core",
+    "05_Firmware/Platforms",
+    "08_Verification/Reports",
+    "08_Verification/Test_Plans",
+    "09_Tools/Scripts"
+  ]
+}
