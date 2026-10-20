@@ -132,3 +132,11 @@ Task 008 只有 C01–C04 真实证据完整、产物核验通过且 C05 无越�
 清理前先备份必要证据并核实准确隔离根，禁止对推导路径或真实工程执行批量删除。
 
 返回 [工程入口](../README.md)。
+
+## Task 011 后续验收（2026-10-20）
+
+Task 009 C01 的用户终端摘录 PASS 保持其原有证据来源，不覆盖上面的 Task 008 历史失败。
+Task 011 独立现场已准备，当前为 **PARTIAL / USER ACTION REQUIRED**。
+C02、C03、C04 的 DISCOVERED / INVOKED / OUTPUT_VERIFIED 均 NOT RUN；自动化回归 PASS 不代替原生行为。
+完整命令、明确提示词、隔离哈希及稳定候选评估见 [Task 011 验收报告](task011-native-skill-acceptance.md)。
+Cursor/Copilot 尚未验证；两个 Embedded Skill 保持 Draft 0.1.0，11 项风格保持 ACCEPTED。
