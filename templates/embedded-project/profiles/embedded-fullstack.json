@@ -1,0 +1,25 @@
+{
+  "id": "embedded-fullstack",
+  "description": "软硬件及上位机：在固件骨架上增加硬件、桌面软件和台架验证。",
+  "schema_version": 1,
+  "directories": [
+    "00_Project_Management/Planning",
+    "00_Project_Management/Requirements",
+    "00_Reference/Datasheets",
+    "01_System_Design/Interface_Definitions",
+    "01_System_Design/Specifications",
+    "04_Hardware/Controller",
+    "04_Hardware/Manufacturing",
+    "04_Hardware/Reference",
+    "05_Firmware/Applications",
+    "05_Firmware/Core",
+    "05_Firmware/Platforms",
+    "06_Software/Shared",
+    "06_Software/Studio",
+    "08_Verification/Bench",
+    "08_Verification/Measurements",
+    "08_Verification/Reports",
+    "08_Verification/Test_Plans",
+    "09_Tools/Scripts"
+  ]
+}

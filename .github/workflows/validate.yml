@@ -22,3 +22,48 @@ jobs:
         run: python -m pip install PyYAML==6.0.3
       - name: Validate project
         run: python scripts/validate.py
+      - name: Validate repository scaffold
+        run: python scripts/validate_repository.py
+      - name: Run repository unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate Embedded C standard
+        run: python scripts/validate_embedded_c.py
+      - name: Check Embedded C Skill distribution copies
+        run: python scripts/sync_embedded_c_skill.py --check
+      - name: Validate Embedded C Skill
+        run: python scripts/validate_embedded_c_skill.py
+      - name: Check Embedded Project Skill distribution copies
+        run: python scripts/sync_embedded_project_skill.py --check
+      - name: Validate Embedded Project Skill
+        run: python scripts/validate_embedded_project_skill.py
+      - name: Validate Skill distribution foundation
+        run: python scripts/validate_skill_distribution.py
+      - name: Validate isolated cross-Skill workflows
+        run: python scripts/validate_skill_e2e.py --verbose
+      - name: Package all catalog Skills locally
+        run: |
+          python scripts/skill_dist.py list
+          for skill in git-governance embedded-c-module embedded-project-init; do
+            python scripts/skill_dist.py pack --skill "$skill" --output-dir "$RUNNER_TEMP/skill packages"
+          done
+      - name: Exercise standalone project Skill
+        run: |
+          cp -R skills/embedded-project-init "$RUNNER_TEMP/project skill"
+          for profile in firmware embedded-fullstack robotics; do
+            python -I "$RUNNER_TEMP/project skill/scripts/init_project.py" --target "$RUNNER_TEMP/project $profile" --name "Example Project" --profile "$profile" --dry-run
+            python -I "$RUNNER_TEMP/project skill/scripts/init_project.py" --target "$RUNNER_TEMP/project $profile" --name "Example Project" --profile "$profile"
+            python -I "$RUNNER_TEMP/project skill/scripts/validate_project.py" --target "$RUNNER_TEMP/project $profile" --profile "$profile"
+          done
+      - name: Compile generated module
+        run: |
+          python skills/embedded-c-module/scripts/new_c_module.py --module sample_module --output "$RUNNER_TEMP/generated module"
+          gcc -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Werror \
+            -c "$RUNNER_TEMP/generated module/sample_module.c" -o "$RUNNER_TEMP/sample_module.o"
+      - name: Compile and run Embedded C example
+        run: |
+          gcc -std=c11 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Werror \
+            -I standards/embedded-c/examples \
+            standards/embedded-c/examples/adc_scale.c \
+            standards/embedded-c/examples/test_adc_scale.c \
+            -o "$RUNNER_TEMP/adc_scale_test"
+          "$RUNNER_TEMP/adc_scale_test"

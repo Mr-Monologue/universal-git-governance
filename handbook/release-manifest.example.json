@@ -1,0 +1,39 @@
+{
+  "example_only": true,
+  "proposal_status": "UNAPPROVED",
+  "repository_release_version": "<OWNER_APPROVED_VERSION>",
+  "repository_commit": "<ACTUAL_RELEASE_COMMIT_SHA>",
+  "release_stage": "<CANDIDATE_OR_FORMAL>",
+  "skills": [
+    {
+      "name": "git-governance",
+      "version": "3.0.0",
+      "channel": "stable",
+      "source_dir": "git-governance",
+      "archive": "git-governance-3.0.0-stable.zip",
+      "sha256": "<COMPUTE_FROM_ACTUAL_ARCHIVE>",
+      "install_path": ".agents/skills/git-governance"
+    },
+    {
+      "name": "embedded-c-module",
+      "version": "0.1.0",
+      "channel": "preview",
+      "source_dir": "skills/embedded-c-module",
+      "archive": "embedded-c-module-0.1.0-preview.zip",
+      "sha256": "<COMPUTE_FROM_ACTUAL_ARCHIVE>",
+      "install_path": ".agents/skills/embedded-c-module"
+    },
+    {
+      "name": "embedded-project-init",
+      "version": "0.1.0",
+      "channel": "preview",
+      "source_dir": "skills/embedded-project-init",
+      "archive": "embedded-project-init-0.1.0-preview.zip",
+      "sha256": "<COMPUTE_FROM_ACTUAL_ARCHIVE>",
+      "install_path": ".agents/skills/embedded-project-init"
+    }
+  ],
+  "validation_record": "<ACTUAL_TEST_RECORD_AND_NOT_RUN_ITEMS>",
+  "approval_record": "<OWNER_APPROVAL_RECORD>",
+  "rollback_backup": "<VERIFIED_PREVIOUS_PACKAGE_AND_RECEIPT>"
+}
